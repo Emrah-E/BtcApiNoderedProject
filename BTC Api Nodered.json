@@ -1,0 +1,178 @@
+[
+    {
+        "id": "signal_bot_1",
+        "type": "tab",
+        "label": "Kripto Sinyal Botu",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "n1",
+        "type": "inject",
+        "z": "signal_bot_1",
+        "name": "Her 10 Saniyede Bir",
+        "props": [],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "n2"
+            ]
+        ]
+    },
+    {
+        "id": "n2",
+        "type": "http request",
+        "z": "signal_bot_1",
+        "name": "Binance BTC Fiyatı",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 390,
+        "y": 120,
+        "wires": [
+            [
+                "n3",
+                "n4"
+            ]
+        ]
+    },
+    {
+        "id": "n3",
+        "type": "function",
+        "z": "signal_bot_1",
+        "name": "Sinyal Karar Mekanizması",
+        "func": "const price = parseFloat(msg.payload.price);\nconst threshold = 95000; // Örnek eşik fiyatı\n\nmsg.payload = price;\n\nif (price < threshold) {\n    msg.signal = \"AL 🟢\";\n    msg.color = \"green\";\n} else {\n    msg.signal = \"SAT 🔴\";\n    msg.color = \"red\";\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 120,
+        "wires": [
+            [
+                "n5",
+                "n6"
+            ]
+        ]
+    },
+    {
+        "id": "n4",
+        "type": "debug",
+        "z": "signal_bot_1",
+        "name": "Ham Veri",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "n5",
+        "type": "ui_text",
+        "z": "signal_bot_1",
+        "group": "7ae3e0da0b87c718",
+        "order": 1,
+        "width": 13,
+        "height": 1,
+        "name": "Sinyal Ekranı",
+        "label": "Tavsiye: ",
+        "format": "{{msg.signal}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 890,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "n6",
+        "type": "ui_chart",
+        "z": "signal_bot_1",
+        "name": "",
+        "group": "7ae3e0da0b87c718",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "BTC Canlı Fiyat",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 890,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7ae3e0da0b87c718",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "0810d102cf7a6ef9",
+        "order": 1,
+        "disp": true,
+        "width": 14
+    },
+    {
+        "id": "0810d102cf7a6ef9",
+        "type": "ui_tab",
+        "name": "Btc ",
+        "icon": "dashboard",
+        "order": 9,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "cbad8be4bf0ab0df",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
